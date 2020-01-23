@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+import os
 import logging
 from flask import escape
-from flights.monthly_update.ingest_flights import *
+from ingest_flights import *
 
 
 def ingest_flights(request):

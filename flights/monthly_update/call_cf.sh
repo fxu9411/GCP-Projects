@@ -12,6 +12,8 @@ REGION=$2
 PATH=$3
 TOKEN=$4
 
+echo "Im here"
+
 URL="https://${REGION}-${PROJECT}.cloudfunctions.net/${PATH}"
 
 echo {\"year\":\"2018\"\,\"month\":\"02\"\,\"bucket\":\"${BUCKET}\", \"token\":\"${TOKEN}\"} > /tmp/message

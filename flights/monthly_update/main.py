@@ -22,3 +22,4 @@ def ingest_flights(request):
         logging.info('Success ... ingested to {}'.format(gcs_file))
 
     except DataUnavailable as e:
+        logging.info('Try again later: {}'.format(e.message))

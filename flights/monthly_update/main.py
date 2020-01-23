@@ -1,6 +1,5 @@
 import logging
 from flask import escape
-from ingest_flights import *
 
 
 def ingest_flights(request):
@@ -17,10 +16,10 @@ def ingest_flights(request):
         bucket = escape(json['bucket'])
 
         if year is None or month is None or len(year) == 0 or len(month) == 0:
-            year, month = next_month(bucket)
+            year, month = ingest_flights.next_month(bucket)
         logging.debug('Ingesting year = {}, month = {}'.format(year, month))
-        gcs_file = ingest(year, month, bucket)
+        gcs_file = ingest_flights.ingest(year, month, bucket)
         logging.info('Success ... ingested to {}'.format(gcs_file))
 
-    except DataUnavailable as e:
+    except ingest_flights.DataUnavailable as e:
         logging.info('Try again later: {}'.format(e.message))

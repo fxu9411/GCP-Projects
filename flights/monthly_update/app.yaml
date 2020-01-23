@@ -4,7 +4,7 @@ service: flights
 
 #[START env]
 env_variables:
-  CLOUD_STORAGE_BUCKET: cloud-training-demos-ml
+  CLOUD_STORAGE_BUCKET: data_science_on_gcp_bucket
 #[END env]
 
 

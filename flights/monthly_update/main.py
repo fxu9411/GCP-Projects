@@ -2,6 +2,7 @@ import logging
 from flask import escape
 from ingest_flights import *
 
+
 def ingest_flights(request):
     try:
         logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)

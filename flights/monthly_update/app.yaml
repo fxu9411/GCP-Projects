@@ -1,0 +1,13 @@
+runtime: python37
+entrypoint: gunicorn -b :$PORT ingestapp:app
+service: flights
+
+#[START env]
+env_variables:
+  CLOUD_STORAGE_BUCKET: cloud-training-demos-ml
+#[END env]
+
+
+handlers:
+- url: /.*
+  script: ingestapp.app

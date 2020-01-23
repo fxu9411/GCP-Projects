@@ -93,7 +93,7 @@ def upload(csv_file, bucket_name, blob_name):
     client = storage.Client()
     bucket = client.get_bucket(bucket_name)
     blob = Blob(blob_name, bucket)
-    blob.update_from_filename(csv_file)
+    blob.upload_from_filename(csv_file)
 
     gcslocation = 'gs://{}/{}'.format(bucket_name, blob_name)
     logging.info('Uploaded {} ...'.format(gcslocation))

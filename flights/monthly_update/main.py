@@ -1,6 +1,6 @@
 import logging
 from flask import escape
-from ingest_flights import *
+from .ingest_flights import *
 
 def ingest_flights(request):
     try:

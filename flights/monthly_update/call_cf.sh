@@ -2,7 +2,7 @@
 
 if [ "$#" -ne 4 ]; then
     echo "Usage: ./call_cf.sh  destination-bucket-name compute-region ingest-url  personal-access-token"
-    echo "   eg: ./call_cf.sh  data_science_on_gcp_bucket us-east1 ingest_flights DI8TWPzTedNF0b3B8meFPxXSWw6m3bKG"
+    echo "   eg: ./call_cf.sh  data_science_on_gcp_bucket us-central1 ingest_flights QHh3ST4mv6nIfFZaLyXZbeXtGQqkU9Im"
     exit
 fi
 

@@ -89,5 +89,69 @@ def remove_quotes_comma(csv_file, YEAR, MONTH):
         os.remove(csv_file)
 
 
+def upload(csv_file, bucket_name, blob_name):
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+    blob = Blob(blob_name, bucket)
+    blob.update_from_filename(csv_file)
+
+    gcslocation = 'gs://{}/{}'.format(bucket_name, blob_name)
+    logging.info('Uploaded {} ...'.format(gcslocation))
+
+    return gcslocation
 
 
+def ingest(year, month, bucket):
+    tempdir = tempfile.mkdtemp(prefix='ingest_flights')
+    try:
+        zipfile = download(year, month, tempdir)
+        bts_csv = zip_to_csv(zipfile, tempdir)
+        csv_file = remove_quotes_comma(bts_csv, year, month)
+        verify_ingest(csv_file)
+        gcslocation = 'flights/raw/{}'.format(os.path.basename(csv_file))
+        return upload(csv_file, bucket, gcslocation)
+    finally:
+        logging.debug('Cleaning up by removing {}'.format(tempdir))
+        shutil.rmtree(tempdir)
+
+def next_month(bucket_name):
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+    blobs = list(bucket.list_blobs(prefix='flights/raw/'))
+    files = [blob.name for blob in blobs if 'csv' in blob.name]
+    last_file = os.path.basename(files[-1])
+    logging.debug('The latest file on GCS is {}'.format(last_file))
+    year = last_file[:4]
+    month = last_file[4:6]
+    return compute_next_month(year, month)
+
+
+def compute_next_month(year, month):
+    dt = datetime.datetime(int(year), int(month), 15)
+    dt = dt + datetime.timedelta(30)
+    logging.debug('The next month is {}'.format(dt))
+    return ('{}'.format(dt.year), '{:02d}'.format(dt.month))
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='ingest flights data from BTS website to Google Cloud Storage')
+    parser.add_argument('--bucket', help='GCS bucket to upload data to', required=True)
+    parser.add_argument('--year', help='Example: 2017. If not provided, defaults to getting next month.')
+    parser.add_argument('--month', help='Specify 01 for January. If not provided, defaults to getting next month')
+
+    try:
+        logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+        args = parser.parse_args()
+        if args.year is None or args.month is None:
+            year, month = next_month(args.bucket)
+        else:
+            year = args.year
+            month = args.month
+
+        logging.debug('Ingesting year = {}, month = {}'.format(year, month))
+        gcs_file = ingest(year, month, args.bucket)
+        logging.info('Success ... ingested to {}'.format(gcs_file))
+
+    except DataUnavailable as e:
+        logging.info('Try again later: {]'.format(e.message))

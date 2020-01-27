@@ -11,7 +11,6 @@ import datetime
 import tempfile
 from google.cloud import storage
 from google.cloud.storage import Blob
-
 from urllib.request import urlopen as impl
 
 def urlopen(url, data):

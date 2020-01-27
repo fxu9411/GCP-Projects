@@ -14,7 +14,6 @@ TOKEN=$4
 
 URL="https://${REGION}-${PROJECT}.cloudfunctions.net/${PATH}"
 
-echo {\"year\":\"2018\"\,\"month\":\"02\"\,\"bucket\":\"${BUCKET}\", \"token\":\"${TOKEN}\"} > /tmp/message
-cat /tmp/message
+echo ${URL}
 
-curl -X POST "https://${REGION}-${PROJECT}.cloudfunctions.net/$URL" -H "Content-Type:application/json" --data-binary @/tmp/message
+curl -X POST "https://${REGION}-${PROJECT}.cloudfunctions.net/${URL}" -H "Content-Type:application/json" --data-binary

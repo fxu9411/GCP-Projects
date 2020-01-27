@@ -15,7 +15,7 @@ bash authorize_cloudshell.sh
 counter=0
 #for FILE in $(gsutil ls gs://${BUCKET}/flights/raw/2015*.csv); do
 #   gsutil cp $FILE flights.csv-${counter}
-for FILE in 201501.csv 201507.csv; do
+for FILE in 201701.csv 201707.csv; do
    gsutil cp gs://${BUCKET}/flights/raw/$FILE flights.csv-${counter}
    counter=$((counter+1))
 done

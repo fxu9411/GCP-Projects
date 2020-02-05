@@ -8,7 +8,7 @@ def ingest_flights(request):
         logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
         json = request.get_json()
 
-        if escape(json['token']) != 'DI8TWPzTedNF0b3B8meFPxXSWw6m3bKG':
+        if escape(json['token']) != 'bWJ3745beyuGhZN8mKn8z8laqlndh8c6':
             logging.info('Ignoring request without valid token')
             return
 
